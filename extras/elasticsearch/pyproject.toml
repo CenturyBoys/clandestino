@@ -1,17 +1,18 @@
 [tool.poetry]
-name = "clandestino_postgres"
+name = "clandestino_elasticsearch"
 version = "0.1.0"
-description = "Clandestino Postgres implementation"
+description = "Clandestino Elasticsearch implementation"
 authors = ["XimitGaia <im.ximit@gmail.com>"]
 readme = "README.md"
 packages = [
-    {include = "clandestino_postgres"},
+    {include = "clandestino_elasticsearch"},
 ]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 python-decouple = "^3.8"
-psycopg = {version = "^3.1.18", extras = ["binary"]}
+elasticsearch = "^8.12.1"
+aiohttp = "^3.9.3"
 clandestino-interfaces = "^0.1.0"
 
 [build-system]

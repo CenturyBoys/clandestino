@@ -6,14 +6,11 @@ version = "0.1.0"
 description = "Clandestino base interfaces"
 category = "main"
 optional = false
-python-versions = "^3.11"
+python-versions = ">=3.11,<4.0"
 files = [
-    {file = "clandestino_interfaces-0.1.0.tar.gz", hash = "sha256:b1b9f206992921efffd0a108b86c06d7daa36dbc378d368b642dada01b3cd147"},
+    {file = "clandestino_interfaces-0.1.0-py3-none-any.whl", hash = "sha256:3b9f00d091ac1d121ef4344d9e2718a1dcbc3f7dbaebb0334bc0257b5e4df28c"},
+    {file = "clandestino_interfaces-0.1.0.tar.gz", hash = "sha256:896208c5f554bfd0eb2bea9052609d9685981ae6463c78c5eeabaf965ecb58a0"},
 ]
-
-[package.source]
-type = "file"
-url = "../interfaces/dist/clandestino_interfaces-0.1.0.tar.gz"
 
 [[package]]
 name = "psycopg"
@@ -154,4 +151,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d10991ca65d524fb7e150dbf6f5814570d819303a50dacca309efd52cf47e5e4"
+content-hash = "38b51034ec73405b0f982f5efd40b55776826d33be150e3ef0bcd7af9e457161"

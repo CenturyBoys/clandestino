@@ -1,4 +1,4 @@
-from clandestino_postgres import PostgresInfra
+from .infra import PostgresInfra
 
 from clandestino_interfaces import IMigrateRepository
 

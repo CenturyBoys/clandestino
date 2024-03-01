@@ -1,9 +1,10 @@
 from clandestino_interfaces import AbstractMigration
+from clandestino_mongo.infra import MongoInfra
 
 
 class Migration(AbstractMigration):
 
-    infra = None
+    infra = MongoInfra()
 
     async def up(self) -> None:
         """Do modifications in database"""

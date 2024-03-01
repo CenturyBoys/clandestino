@@ -8,10 +8,15 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 python-decouple = "^3.8"
+clandestino-interfaces = "^0.1.1"
+clandestino_postgres = { version = "^0.1.0", optional = true}
+clandestino_mongo = { version = "^0.1.0", optional = true}
+clandestino_elasticsearch = { version = "^0.1.0", optional = true}
 
-clandestino-interfaces = {path = "/home/ximit/Projects/clandestino/extras/interfaces/dist/clandestino_interfaces-0.1.0.tar.gz"}
-clandestino-postgres = {path = "/home/ximit/Projects/clandestino/extras/postgres/dist/clandestino_postgres-0.1.0.tar.gz"}
-clandestino-mongo = {path = "/home/ximit/Projects/clandestino/extras/mongo/dist/clandestino_mongo-0.1.0.tar.gz"}
+[tool.poetry.extras]
+postgres = ["clandestino_postgres"]
+mongo = ["clandestino_mongo"]
+elasticsearch = ["clandestino_elasticsearch"]
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"

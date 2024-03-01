@@ -10,11 +10,12 @@ import clandestino_interfaces as cdti
 
 _cdtp = None
 _cdtm = None
+_cdte = None
 
 OPTION_STARTSWITH = "-"
 
 available_options = {
-    "-help": {
+    "-h": {
         "description": "Display help",
         "params": [],
     },
@@ -27,7 +28,7 @@ available_options = {
         "params": [],
     },
     "-rm": {
-        "description": "Roll back last migration",
+        "description": "Rollback last migration",
         "params": [],
     },
     "-cm": {
@@ -70,10 +71,12 @@ def _load_migration_repository() -> cdti.IMigrateRepository:
         my_repository = import_module(self_implemented_repository)
         return my_repository.MigrateRepository()
 
-    elif config("CLANDESTINO_MIGRATION_REPO") == "POSTGRES":
+    elif config("CLANDESTINO_MIGRATION_REPO", default=False) == "POSTGRES":
         return _cdtp.repository.PostgresMigrateRepository()
-    elif config("CLANDESTINO_MIGRATION_REPO") == "MONGO":
+    elif config("CLANDESTINO_MIGRATION_REPO", default=False) == "MONGO":
         return _cdtm.repository.MongoMigrateRepository()
+    elif config("CLANDESTINO_MIGRATION_REPO", default=False) == "ELASTICSEARCH":
+        return _cdte.repository.ElasticsearchMigrateRepository()
 
 
 async def migrate_database():
@@ -86,26 +89,28 @@ async def migrate_database():
     for importer, migration_name, is_package in iter_modules(
         [f"{os.getcwd()}{os.sep}migrations"]
     ):
-        if not is_package:
-            import_str = f"migrations.{migration_name}"
-            migration_import_reference = import_module(import_str)
-            migration: cdti.AbstractMigration = migration_import_reference.Migration(
-                migration_name=migration_name,
-                migration_repository=_load_migration_repository(),
-            )
-            await migration.migrate()
+        if str(migration_name).startswith("migration"):
+            if not is_package:
+                import_str = f"migrations.{migration_name}"
+                migration_import_reference = import_module(import_str)
+                migration: cdti.AbstractMigration = (
+                    migration_import_reference.Migration(
+                        migration_name=migration_name,
+                        migration_repository=_load_migration_repository(),
+                    )
+                )
+                await migration.migrate()
 
 
 async def list_migrate_database():
     print("Migrations: ")
     print_sep()
-    not_allowed_migrations = ["ref"]
     for _, migration_name, _ in iter_modules([f"{os.getcwd()}{os.sep}migrations"]):
-        if migration_name not in not_allowed_migrations:
+        if str(migration_name).startswith("migration"):
             print(migration_name)
 
 
-async def roll_back_migration():
+async def rollback_migration():
     modules_list = [
         (importer, migration_name, is_package)
         for importer, migration_name, is_package in iter_modules(
@@ -148,12 +153,14 @@ def _migration_name(migration_name: str) -> str:
 def _get_path() -> str:
     path = f"{os.getcwd()}{os.sep}migrations"
     if not os.path.exists(path):
-        print(cdti.MigrationStatus.ERROR.value)
-        raise Exception(f"Path not exists: {path}")
+        print(f"Path not exists: {path}, creating!")
+        os.mkdir(path)
     return path
 
 
-def _get_ref_migration(migration_type: str) -> str:
+def _get_ref_migration(migration_type: str = None) -> str:
+    if migration_type is not None:
+        migration_type = migration_type.upper()
     self_implemented_repository = f"{os.getcwd()}{os.sep}migrations{os.sep}ref.py"
     if os.path.exists(self_implemented_repository):
         return self_implemented_repository
@@ -161,22 +168,24 @@ def _get_ref_migration(migration_type: str) -> str:
         return _cdtp.ref.__file__
     elif migration_type == "MONGO":
         return _cdtm.ref.__file__
+    elif migration_type == "ELASTICSEARCH":
+        return _cdte.ref.__file__
     else:
         from .src import ref
 
         return ref.__file__
 
 
-async def create_database_migrate(migration_name: str, migration_type: str):
-    file_name = _migration_name(migration_name)
-    print(f"Creating {migration_type} migration: {file_name} ", end="")
-
+async def create_database_migrate(migration_name: str, migration_type: str = None):
     path = _get_path()
+    file_name = _migration_name(migration_name)
+    print(
+        f"Creating {migration_type if migration_type else 'empty'} migration: {file_name} ",
+        end="",
+    )
     try:
         with open(f"{path}{os.sep}{file_name}", "w") as migration_file:
-            with open(
-                _get_ref_migration(migration_type.upper()), "r"
-            ) as migration_ref_file:
+            with open(_get_ref_migration(migration_type), "r") as migration_ref_file:
                 migration_file.write(migration_ref_file.read())
         print(cdti.MigrationStatus.OK.value)
     except BaseException as e:
@@ -185,10 +194,10 @@ async def create_database_migrate(migration_name: str, migration_type: str):
 
 
 options_callback = {
-    "-help": help_callback,
+    "-h": help_callback,
     "-m": migrate_database,
     "-lm": list_migrate_database,
-    "-rm": roll_back_migration,
+    "-rm": rollback_migration,
     "-cm": create_database_migrate,
 }
 
@@ -196,22 +205,35 @@ options_callback = {
 def load():
     try:
         import clandestino_postgres
+
         global _cdtp
         _cdtp = clandestino_postgres
     except ImportError as error:
-        if config("CLANDESTINO_MIGRATION_REPO") == "POSTGRES":
+        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "POSTGRES":
             raise Exception(
                 "You define to use POSTGRES but not install the extra package clandestino_postgres"
             )
 
     try:
         import clandestino_mongo
+
         global _cdtm
         _cdtm = clandestino_mongo
     except ImportError as error:
-        if config("CLANDESTINO_MIGRATION_REPO") == "MONGO":
+        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "MONGO":
             raise Exception(
                 "You define to use MONGO but not install the extra package clandestino_mongo"
+            )
+
+    try:
+        import clandestino_elasticsearch
+
+        global _cdte
+        _cdte = clandestino_elasticsearch
+    except ImportError as error:
+        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "ELASTICSEARCH":
+            raise Exception(
+                "You define to use MONGO but not install the extra package clandestino_elasticsearch"
             )
 
 

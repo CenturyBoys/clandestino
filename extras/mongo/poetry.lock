@@ -6,14 +6,11 @@ version = "0.1.0"
 description = "Clandestino base interfaces"
 category = "main"
 optional = false
-python-versions = "^3.11"
+python-versions = ">=3.11,<4.0"
 files = [
+    {file = "clandestino_interfaces-0.1.0-py3-none-any.whl", hash = "sha256:3b9f00d091ac1d121ef4344d9e2718a1dcbc3f7dbaebb0334bc0257b5e4df28c"},
     {file = "clandestino_interfaces-0.1.0.tar.gz", hash = "sha256:896208c5f554bfd0eb2bea9052609d9685981ae6463c78c5eeabaf965ecb58a0"},
 ]
-
-[package.source]
-type = "file"
-url = "../interfaces/dist/clandestino_interfaces-0.1.0.tar.gz"
 
 [[package]]
 name = "dnspython"
@@ -180,4 +177,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0343408b9a1e720a00dc6530588cdad18131266ab8987596d780105fd563e2e7"
+content-hash = "3072b24a82782e14c8fd64df0aa37491a64063ac58909007fe44ddcc76cc984d"

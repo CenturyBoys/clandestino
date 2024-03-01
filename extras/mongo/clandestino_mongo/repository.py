@@ -1,6 +1,6 @@
 import datetime
 
-from clandestino_mongo import MongoInfra
+from .infra import MongoInfra
 
 from clandestino_interfaces import IMigrateRepository
 
@@ -29,10 +29,7 @@ class MongoMigrateRepository(IMigrateRepository, MongoInfra):
     @classmethod
     async def register_migration_execution(cls, migration_name: str) -> None:
         control_collection = cls.get_control_collection()
-        query = {
-            "name": migration_name,
-            "created_at": datetime.datetime.utcnow()
-        }
+        query = {"name": migration_name, "created_at": datetime.datetime.utcnow()}
         async with cls.get_database() as database:
             collection = database[control_collection]
             await collection.insert_one(query)
@@ -40,9 +37,7 @@ class MongoMigrateRepository(IMigrateRepository, MongoInfra):
     @classmethod
     async def remove_migration_execution(cls, migration_name: str) -> None:
         control_collection = cls.get_control_collection()
-        query = {
-            "name": migration_name
-        }
+        query = {"name": migration_name}
         async with cls.get_database() as database:
             collection = database[control_collection]
             await collection.delete_one(query)
@@ -50,9 +45,7 @@ class MongoMigrateRepository(IMigrateRepository, MongoInfra):
     @classmethod
     async def migration_already_executed(cls, migration_name: str) -> bool:
         control_collection = cls.get_control_collection()
-        query = {
-            "name": migration_name
-        }
+        query = {"name": migration_name}
         async with cls.get_database() as database:
             collection = database[control_collection]
             result = await collection.find_one(query)
