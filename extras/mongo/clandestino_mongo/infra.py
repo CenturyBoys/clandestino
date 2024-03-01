@@ -1,7 +1,11 @@
+import os
+
 from contextlib import asynccontextmanager
 
-from decouple import config
+from decouple import AutoConfig
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
+
+config = AutoConfig(search_path=os.getcwd())
 
 
 class MongoInfra:
@@ -17,7 +21,7 @@ class MongoInfra:
     @classmethod
     async def __close_client(cls) -> AsyncIOMotorClient:
         if cls.__client is not None:
-            await cls.__client.close()
+            cls.__client.close()
             cls.__client = None
 
     @classmethod

@@ -2,11 +2,13 @@ import os
 import sys
 import asyncio
 from datetime import datetime
-from decouple import config
+from decouple import AutoConfig
 from importlib import import_module
 from pkgutil import iter_modules
 
 import clandestino_interfaces as cdti
+
+config = AutoConfig(search_path=f"{os.getcwd()}")
 
 _cdtp = None
 _cdtm = None
@@ -43,7 +45,6 @@ def print_sep():
 
 
 async def help_callback():
-    from decouple import config
 
     clandestino_options = f"cldest [{'|'.join(available_options.keys())}] [params]"
     header = (
@@ -80,19 +81,19 @@ def _load_migration_repository() -> cdti.IMigrateRepository:
 
 
 async def migrate_database():
+    load()
     print(
         "Running migrations: " f"{cdti.MigrationStatus.OK.value} - success | ",
         f"{cdti.MigrationStatus.ERROR.value} - error | ",
         f"{cdti.MigrationStatus.SKIPPED.value} - skipped",
     )
     print_sep()
-    for importer, migration_name, is_package in iter_modules(
-        [f"{os.getcwd()}{os.sep}migrations"]
-    ):
+    _path = f"{os.getcwd()}{os.sep}migrations"
+    sys.path.append(_path)
+    for importer, migration_name, is_package in iter_modules([_path]):
         if str(migration_name).startswith("migration"):
             if not is_package:
-                import_str = f"migrations.{migration_name}"
-                migration_import_reference = import_module(import_str)
+                migration_import_reference = import_module(migration_name)
                 migration: cdti.AbstractMigration = (
                     migration_import_reference.Migration(
                         migration_name=migration_name,
@@ -202,40 +203,43 @@ options_callback = {
 }
 
 
+
 def load():
-    try:
-        import clandestino_postgres
+    global _loaded
+    if not _loaded:
+        try:
+            import clandestino_postgres
 
-        global _cdtp
-        _cdtp = clandestino_postgres
-    except ImportError as error:
-        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "POSTGRES":
-            raise Exception(
-                "You define to use POSTGRES but not install the extra package clandestino_postgres"
-            )
+            global _cdtp
+            _cdtp = clandestino_postgres
+        except ImportError as error:
+            if config("CLANDESTINO_MIGRATION_REPO", default=False) == "POSTGRES":
+                raise Exception(
+                    "You define to use POSTGRES but not install the extra package clandestino_postgres"
+                )
 
-    try:
-        import clandestino_mongo
+        try:
+            import clandestino_mongo
 
-        global _cdtm
-        _cdtm = clandestino_mongo
-    except ImportError as error:
-        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "MONGO":
-            raise Exception(
-                "You define to use MONGO but not install the extra package clandestino_mongo"
-            )
+            global _cdtm
+            _cdtm = clandestino_mongo
+        except ImportError as error:
+            if config("CLANDESTINO_MIGRATION_REPO", default=False) == "MONGO":
+                raise Exception(
+                    "You define to use MONGO but not install the extra package clandestino_mongo"
+                )
 
-    try:
-        import clandestino_elasticsearch
+        try:
+            import clandestino_elasticsearch
 
-        global _cdte
-        _cdte = clandestino_elasticsearch
-    except ImportError as error:
-        if config("CLANDESTINO_MIGRATION_REPO", default=False) == "ELASTICSEARCH":
-            raise Exception(
-                "You define to use MONGO but not install the extra package clandestino_elasticsearch"
-            )
-
+            global _cdte
+            _cdte = clandestino_elasticsearch
+        except ImportError as error:
+            if config("CLANDESTINO_MIGRATION_REPO", default=False) == "ELASTICSEARCH":
+                raise Exception(
+                    "You define to use MONGO but not install the extra package clandestino_elasticsearch"
+                )
+    _loaded = True
 
 def main():
     load()

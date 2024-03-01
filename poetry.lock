@@ -208,14 +208,14 @@ python-decouple = ">=3.8,<4.0"
 
 [[package]]
 name = "clandestino-interfaces"
-version = "0.1.0"
+version = "0.1.1"
 description = "Clandestino base interfaces"
 category = "main"
 optional = false
 python-versions = ">=3.11,<4.0"
 files = [
-    {file = "clandestino_interfaces-0.1.0-py3-none-any.whl", hash = "sha256:3b9f00d091ac1d121ef4344d9e2718a1dcbc3f7dbaebb0334bc0257b5e4df28c"},
-    {file = "clandestino_interfaces-0.1.0.tar.gz", hash = "sha256:896208c5f554bfd0eb2bea9052609d9685981ae6463c78c5eeabaf965ecb58a0"},
+    {file = "clandestino_interfaces-0.1.1-py3-none-any.whl", hash = "sha256:4cd1f852214091e282bf031bd166af268fb3d6bccf7022432ca9b0046207c256"},
+    {file = "clandestino_interfaces-0.1.1.tar.gz", hash = "sha256:2bab8b6d3854eeed38204bce4c60cc1a8bdc758552e1a5f236dfadef554061a7"},
 ]
 
 [[package]]
@@ -984,4 +984,4 @@ postgres = ["clandestino_postgres"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0569807283fec5c1faf22d571c578afd7c2c8ceec22fb1610a87e94eba794944"
+content-hash = "9e577def76eb178d332bf43aeb39ca739eaf5ca056bd4d922169d51f8cf87eb8"

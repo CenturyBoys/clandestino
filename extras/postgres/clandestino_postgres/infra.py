@@ -1,7 +1,11 @@
+import os
+
 from contextlib import asynccontextmanager
 
-from decouple import config
+from decouple import AutoConfig
 from psycopg import AsyncConnection, AsyncCursor
+
+config = AutoConfig(search_path=os.getcwd())
 
 
 class PostgresInfra:
