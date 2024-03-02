@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "clandestino"
-version = "0.1.0"
-description = ""
+version = "0.1.1"
+description = "Simple migration tool for your python project"
 authors = ["XimitGaia <im.ximit@gmail.com>"]
 readme = "README.md"
 
@@ -27,3 +27,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 cdt = "clandestino.clandestino:main"
+
+
+[tool.poetry.urls]
+homepage = "https://github.com/CenturyBoys/clandestino"
+documentation = "https://github.com/CenturyBoys/clandestino/blob/main/README.md"
+repository = "https://github.com/CenturyBoys/clandestino/tree/main"
+bugs = "https://github.com/CenturyBoys/clandestino/issues"
