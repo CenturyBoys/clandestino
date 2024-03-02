@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "clandestino_mongo"
+version = "0.1.0"
+description = "Clandestino Mongo implementation"
+authors = ["XimitGaia <im.ximit@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "clandestino_mongo"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-decouple = "^3.8"
+motor = "^3.3.2"
+clandestino-interfaces = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

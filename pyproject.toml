@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "clandestino"
+version = "0.1.0"
+description = ""
+authors = ["XimitGaia <im.ximit@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-decouple = "^3.8"
+clandestino-interfaces = "^0.1.1"
+clandestino_postgres = { version = "^0.1.0", optional = true}
+clandestino_mongo = { version = "^0.1.0", optional = true}
+clandestino_elasticsearch = { version = "^0.1.0", optional = true}
+
+[tool.poetry.extras]
+postgres = ["clandestino_postgres"]
+mongo = ["clandestino_mongo"]
+elasticsearch = ["clandestino_elasticsearch"]
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+cdt = "clandestino.clandestino:main"

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "clandestino_elasticsearch"
+version = "0.1.0"
+description = "Clandestino Elasticsearch implementation"
+authors = ["XimitGaia <im.ximit@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include = "clandestino_elasticsearch"},
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-decouple = "^3.8"
+elasticsearch = "^8.12.1"
+aiohttp = "^3.9.3"
+clandestino-interfaces = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
