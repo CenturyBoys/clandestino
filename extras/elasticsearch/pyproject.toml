@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clandestino_elasticsearch"
-version = "0.1.0"
+version = "0.1.1"
 description = "Clandestino Elasticsearch implementation"
 authors = ["XimitGaia <im.ximit@gmail.com>"]
 readme = "README.md"

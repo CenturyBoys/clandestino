@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clandestino"
-version = "0.1.2"
+version = "0.1.3"
 description = "Simple migration tool for your python project"
 authors = ["XimitGaia <im.ximit@gmail.com>"]
 readme = "README.md"
@@ -9,9 +9,9 @@ readme = "README.md"
 python = "^3.11"
 python-decouple = "^3.8"
 clandestino-interfaces = "^0.1.1"
-clandestino_postgres = { version = "^0.1.0", optional = true}
-clandestino_mongo = { version = "^0.1.0", optional = true}
-clandestino_elasticsearch = { version = "^0.1.0", optional = true}
+clandestino_postgres = { version = "^0.1.1", optional = true}
+clandestino_mongo = { version = "^0.1.1", optional = true}
+clandestino_elasticsearch = { version = "^0.1.1", optional = true}
 
 [tool.poetry.extras]
 postgres = ["clandestino_postgres"]
