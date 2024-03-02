@@ -14,6 +14,8 @@ _cdtp = None
 _cdtm = None
 _cdte = None
 
+_loaded = False
+
 OPTION_STARTSWITH = "-"
 
 available_options = {
@@ -203,7 +205,6 @@ options_callback = {
 }
 
 
-
 def load():
     global _loaded
     if not _loaded:
@@ -240,6 +241,7 @@ def load():
                     "You define to use MONGO but not install the extra package clandestino_elasticsearch"
                 )
     _loaded = True
+
 
 def main():
     load()
